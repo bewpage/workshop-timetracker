@@ -11,6 +11,7 @@ const NewTaskForm = (): JSX.Element => {
     const form = event.target as HTMLFormElement;
     const formData = new FormData(form);
     let payload: any = {
+      // new task with correct status
       status: 'open',
     };
 

@@ -83,28 +83,25 @@ const TaskList = (): JSX.Element => {
             })
           : null}
       </ul>
-      <div className="card-body">
-        <form>
-          <div className="input-group">
-            <label htmlFor="operationDescription" className="sr-only"></label>
-            <input
-              id="operationDescription"
-              type="text"
-              placeholder="Operation description"
-              className="form-control"
-              minLength={5}
-              disabled={value.status === 'close'}
-            />
-            <div className="input-group-append">
-              <button
-                className="btn btn-info"
-                disabled={value.status === 'close'}>
-                Add
-              </button>
+      {value.status === 'open' ? (
+        <div className="card-body">
+          <form>
+            <div className="input-group">
+              <label htmlFor="operationDescription" className="sr-only"></label>
+              <input
+                id="operationDescription"
+                type="text"
+                placeholder="Operation description"
+                className="form-control"
+                minLength={5}
+              />
+              <div className="input-group-append">
+                <button className="btn btn-info">Add</button>
+              </div>
             </div>
-          </div>
-        </form>
-      </div>
+          </form>
+        </div>
+      ) : null}
     </section>
   );
 

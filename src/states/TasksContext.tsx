@@ -7,8 +7,7 @@ import React, {
 } from 'react';
 import { TaskType } from '../components/App/App';
 import { ReducerEnumActions, taskReducer } from './taskReducer';
-import { ClientRequestArgs } from 'http';
-import { fetchTaskData } from '../api/fetchApi';
+import { api } from '../api/fetchApi';
 
 type Props = {
   children: ReactNode;
@@ -40,22 +39,10 @@ export const TaskContext = createContext<TaskContextType>({
 const TasksContext: React.FC<PropsWithChildren<Props>> = ({ children }) => {
   const [data, dispatch] = useReducer(taskReducer, INITIAL_STATE);
 
-  const options: ClientRequestArgs = {
-    method: 'GET',
-    headers: {
-      Authorization: process.env.REACT_APP_API_KEY,
-    },
-  };
-
-  const fetchOperationData = async (options: any, id: string): Promise<any> => {
-    const url = `/api/tasks/${id}/operations`;
-    const response = await fetch(process.env.REACT_APP_API_HOST + url, options);
-    return await response.json();
-  };
-
   useEffect(() => {
     dispatch({ type: ReducerEnumActions.isLoading, payload: true });
-    fetchTaskData('/api/tasks', options)
+    api
+      .getTasks()
       .then(data => {
         if (!data.error) {
           dispatch({ type: ReducerEnumActions.getTasks, payload: data });
@@ -64,7 +51,7 @@ const TasksContext: React.FC<PropsWithChildren<Props>> = ({ children }) => {
       })
       .then(data => {
         data.forEach((task: TaskType) => {
-          fetchOperationData(options, task.id).then(response => {
+          api.getOperations(task.id).then(response => {
             if (!response.error) {
               dispatch({
                 type: ReducerEnumActions.getOperations,
@@ -78,6 +65,7 @@ const TasksContext: React.FC<PropsWithChildren<Props>> = ({ children }) => {
         });
       })
       .catch(error => {
+        // TODO handle error
         console.log(error);
       })
       .finally(() => {

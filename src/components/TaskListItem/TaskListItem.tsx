@@ -2,7 +2,7 @@ import React, { JSX, useContext } from 'react';
 import { OperationTaskType } from '../App/App';
 import { TaskContext } from '../../states/TasksContext';
 import { ReducerEnumActions } from '../../states/taskReducer';
-import { fetchTaskData } from '../../api/fetchApi';
+import { api } from '../../api/fetchApi';
 import { formatTime } from '../../utils/utils';
 
 const TaskListItem = ({
@@ -14,13 +14,8 @@ const TaskListItem = ({
 
   const deleteOperation = (data: OperationTaskType): void => {
     const { id } = data;
-    const options = {
-      method: 'DELETE',
-      headers: {
-        Authorization: process.env.REACT_APP_API_KEY,
-      },
-    };
-    fetchTaskData(`/api/operations/${id}`, options)
+    api
+      .deleteOperation(id)
       .then(data => {
         if (!data.error) {
           return data;
@@ -49,17 +44,10 @@ const TaskListItem = ({
       id,
       description,
       timeSpent: timeSpent + time,
-    };
+    } as OperationTaskType;
 
-    const options = {
-      method: 'PUT',
-      headers: {
-        Authorization: process.env.REACT_APP_API_KEY,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    };
-    fetchTaskData(`/api/operations/${id}`, options)
+    api
+      .updateOperation(id, payload)
       .then(data => {
         if (!data.error) {
           return data;

@@ -1,4 +1,4 @@
-import React, { JSX, useContext } from 'react';
+import React, { JSX } from 'react';
 import { OperationTaskType, TaskType } from '../App/App';
 
 const TaskListItem = ({

@@ -1,14 +1,14 @@
-import React, { JSX, FormEvent, FormEventHandler, useContext } from 'react';
+import React, { JSX, FormEvent, useContext } from 'react';
 import { TaskContext } from '../../states/TasksContext';
 import { ReducerEnumActions } from '../../states/taskReducer';
 import { fetchTaskData } from '../../api/fetchApi';
 
 const NewTaskForm = (): JSX.Element => {
-  const { data, dispatch } = useContext(TaskContext);
+  const { dispatch } = useContext(TaskContext);
 
-  const formSubmitHandler = (event: FormEvent<HTMLFormElement>): void => {
-    event.preventDefault();
-    const form = event.target as HTMLFormElement;
+  const formSubmitHandler = (e: FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement;
     const formData = new FormData(form);
     let payload: any = {
       // new task with correct status

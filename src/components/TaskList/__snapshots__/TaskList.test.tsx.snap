@@ -82,6 +82,7 @@ exports[`TaskList renders TaskList component with data 1`] = `
             class="form-control"
             id="operationDescription"
             minlength="5"
+            name="description"
             placeholder="Operation description"
             type="text"
           />
@@ -90,6 +91,7 @@ exports[`TaskList renders TaskList component with data 1`] = `
           >
             <button
               class="btn btn-info"
+              type="submit"
             >
               Add
             </button>

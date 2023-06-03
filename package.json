@@ -19,7 +19,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --watchAll=false",
+    "test:update-snapshots": "react-scripts test --watchAll=false -u",
     "eject": "react-scripts eject",
     "prettier": "prettier -w src"
   },

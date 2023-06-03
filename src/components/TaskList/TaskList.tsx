@@ -2,7 +2,7 @@ import React, { JSX, useContext } from 'react';
 import { TaskContext } from '../../states/TasksContext';
 import { TaskType } from '../App/App';
 import TaskListItem from '../TaskListItem/TaskListItem';
-import { fetchTaskData, options } from '../../api/fetchApi';
+import { api } from '../../api/fetchApi';
 import { ReducerEnumActions } from '../../states/taskReducer';
 
 const TaskList = (): JSX.Element => {
@@ -10,11 +10,7 @@ const TaskList = (): JSX.Element => {
 
   const deleteTask = (id: string): void => {
     // fetch api with delete method
-    const deleteOptions = {
-      ...options,
-      method: 'DELETE',
-    };
-    fetchTaskData(`/api/tasks/${id}`, deleteOptions).then(data => {
+    api.deleteTask(id).then(data => {
       if (!data.error) {
         dispatch({ type: ReducerEnumActions.deleteTask, payload: id });
       }
@@ -26,33 +22,30 @@ const TaskList = (): JSX.Element => {
   const closeTask = (id: string): void => {
     // fetch api with update method
     const updateTask = data.tasks.find(task => task.id === id);
-    const updateOptions = {
-      ...options,
-      headers: {
-        ...options.headers,
-        'Content-Type': 'application/json',
-      },
-      method: 'PUT',
-      body: JSON.stringify({
-        title: updateTask?.title,
-        description: updateTask?.description,
+
+    if (updateTask) {
+      const payload = {
+        title: updateTask.title,
+        description: updateTask.description,
         status: 'close',
-      }),
-    };
-    // update the state API call
-    fetchTaskData(`/api/tasks/${id}`, updateOptions)
-      .then(data => {
-        if (!data.error) {
-          return data;
-        }
-      })
-      .then(response => {
-        // response from server with updated task
-        dispatch({
-          type: ReducerEnumActions.updateTask,
-          payload: response.data,
+      } as TaskType;
+
+      // update the state API call
+      api
+        .updateTask(id, payload)
+        .then(data => {
+          if (!data.error) {
+            return data;
+          }
+        })
+        .then(response => {
+          // response from server with updated task
+          dispatch({
+            type: ReducerEnumActions.updateTask,
+            payload: response.data,
+          });
         });
-      });
+    }
   };
 
   // add new operation to task
@@ -73,17 +66,8 @@ const TaskList = (): JSX.Element => {
     });
 
     // fetch api with update method
-    const updateOptions = {
-      ...options,
-      headers: {
-        ...options.headers,
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify(payload),
-    };
-    // update the state API call
-    fetchTaskData(`/api/tasks/${id}/operations`, updateOptions)
+    api
+      .createOperation(id, payload)
       .then(data => {
         if (!data.error) {
           return data;
@@ -159,9 +143,11 @@ const TaskList = (): JSX.Element => {
 
   return (
     <>
-      {data.tasks.map(task => {
-        return taskCardRender(task);
-      })}
+      {data.tasks.length > 0
+        ? data.tasks.map(task => {
+            return taskCardRender(task);
+          })
+        : []}
     </>
   );
 };

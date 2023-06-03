@@ -16,7 +16,7 @@ type Props = {
 
 export type DataState = {
   isLoading: boolean;
-  tasks: TaskType[];
+  tasks: TaskType[] | [];
 };
 
 type TaskContextType = {

@@ -1,6 +1,5 @@
 import { TaskType } from '../components/App/App';
 import { DataState } from './TasksContext';
-import { fetchTaskData } from '../api/fetchApi';
 
 export enum ReducerEnumActions {
   getTasks = 'GET_TASKS',
@@ -8,6 +7,9 @@ export enum ReducerEnumActions {
   addTask = 'ADD_TASK',
   updateTask = 'UPDATE_TASK',
   deleteTask = 'DELETE_TASK',
+  addOperation = 'ADD_OPERATION',
+  updateOperation = 'UPDATE_OPERATION',
+  deleteOperation = 'DELETE_OPERATION',
   isLoading = 'IS_LOADING',
 }
 
@@ -41,6 +43,44 @@ export const taskReducer = (
         (task: TaskType) => task.id !== action.payload
       );
       return { ...state, tasks: task };
+    case ReducerEnumActions.addOperation:
+      const createTasksOperations = state.tasks.map((task: TaskType) => {
+        if (task.id === action.payload.task.id) {
+          return {
+            ...task,
+            operations: [...task?.operations, action.payload],
+          };
+        }
+        return task;
+      });
+      return { ...state, tasks: createTasksOperations };
+    case ReducerEnumActions.updateOperation:
+      const updatedTasksOperations = state.tasks.map((task: TaskType) => {
+        const { taskId, payload } = action.payload;
+        if (task.id === taskId) {
+          const updatedOperations = task.operations.map(operation => {
+            if (operation.id === payload.id) {
+              return { ...operation, ...payload };
+            }
+            return operation;
+          });
+          return { ...task, operations: updatedOperations };
+        }
+        return task;
+      });
+      return { ...state, tasks: updatedTasksOperations };
+    case ReducerEnumActions.deleteOperation:
+      const { idOperation, idTask } = action.payload;
+      const deleteTasksOperations = state.tasks.map((task: TaskType) => {
+        if (task.id === idTask) {
+          const operations = task.operations.filter(
+            operation => operation.id !== idOperation
+          );
+          return { ...task, operations: operations };
+        }
+        return task;
+      });
+      return { ...state, tasks: deleteTasksOperations };
     case ReducerEnumActions.isLoading:
       return { ...state, isLoading: action.payload };
     default:

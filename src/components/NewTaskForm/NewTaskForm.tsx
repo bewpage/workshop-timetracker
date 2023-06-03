@@ -1,7 +1,7 @@
 import React, { JSX, FormEvent, useContext } from 'react';
 import { TaskContext } from '../../states/TasksContext';
 import { ReducerEnumActions } from '../../states/taskReducer';
-import { fetchTaskData } from '../../api/fetchApi';
+import { api } from '../../api/fetchApi';
 
 const NewTaskForm = (): JSX.Element => {
   const { dispatch } = useContext(TaskContext);
@@ -20,16 +20,8 @@ const NewTaskForm = (): JSX.Element => {
       payload[key] = value;
     });
 
-    const option = {
-      method: 'POST',
-      headers: {
-        Authorization: process.env.REACT_APP_API_KEY,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    };
     // update the state
-    fetchTaskData('/api/tasks', option).then(data => {
+    api.createTask(payload).then(data => {
       if (!data.error) {
         dispatch({
           type: ReducerEnumActions.addTask,

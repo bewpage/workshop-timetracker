@@ -1,5 +1,53 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`TaskList click finish task and close task 1`] = `
+<div>
+  <section
+    class="card mt-5 shadow-sm"
+  >
+    <div
+      class="card-header d-flex justify-content-between align-items-center"
+    >
+      <div>
+        <h5>
+          Task Title Test
+        </h5>
+        <h6
+          class="card-subtitle text-muted"
+        >
+          Task Description Test
+        </h6>
+      </div>
+      <div>
+        <button
+          class="btn btn-outline-danger btn-sm ml-2"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+    <ul
+      class="list-group list-group-flush"
+    >
+      <li
+        class="list-group-item d-flex justify-content-between align-items-center"
+      >
+        <div
+          id="task-operation-item-description"
+        >
+          Description Operation Task Test
+          <span
+            class="badge badge-success badge-pill ml-2"
+          >
+             20m
+          </span>
+        </div>
+      </li>
+    </ul>
+  </section>
+</div>
+`;
+
 exports[`TaskList renders TaskList component for close task 1`] = `
 <div>
   <section
@@ -28,7 +76,22 @@ exports[`TaskList renders TaskList component for close task 1`] = `
     </div>
     <ul
       class="list-group list-group-flush"
-    />
+    >
+      <li
+        class="list-group-item d-flex justify-content-between align-items-center"
+      >
+        <div
+          id="task-operation-item-description"
+        >
+          Description Operation Task Test
+          <span
+            class="badge badge-success badge-pill ml-2"
+          >
+             20m
+          </span>
+        </div>
+      </li>
+    </ul>
   </section>
 </div>
 `;
@@ -66,7 +129,39 @@ exports[`TaskList renders TaskList component with data 1`] = `
     </div>
     <ul
       class="list-group list-group-flush"
-    />
+    >
+      <li
+        class="list-group-item d-flex justify-content-between align-items-center"
+      >
+        <div
+          id="task-operation-item-description"
+        >
+          Description Operation Task Test
+          <span
+            class="badge badge-success badge-pill ml-2"
+          >
+             20m
+          </span>
+        </div>
+        <div>
+          <button
+            class="btn btn-outline-success btn-sm mr-2"
+          >
+            +15m
+          </button>
+          <button
+            class="btn btn-outline-success btn-sm mr-2"
+          >
+            +1h
+          </button>
+          <button
+            class="btn btn-outline-danger btn-sm"
+          >
+            Delete
+          </button>
+        </div>
+      </li>
+    </ul>
     <div
       class="card-body"
     >

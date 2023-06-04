@@ -84,6 +84,7 @@ exports[`TaskList renders TaskList component with data 1`] = `
             minlength="5"
             name="description"
             placeholder="Operation description"
+            required=""
             type="text"
           />
           <div

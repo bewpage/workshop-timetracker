@@ -35,3 +35,22 @@ exports[`TaskListItem renders TaskListItem component 1`] = `
   </li>
 </div>
 `;
+
+exports[`TaskListItem renders TaskListItem component for close task 1`] = `
+<div>
+  <li
+    class="list-group-item d-flex justify-content-between align-items-center"
+  >
+    <div
+      id="task-operation-item-description"
+    >
+      Description Operation Task Test
+      <span
+        class="badge badge-success badge-pill ml-2"
+      >
+         20m
+      </span>
+    </div>
+  </li>
+</div>
+`;

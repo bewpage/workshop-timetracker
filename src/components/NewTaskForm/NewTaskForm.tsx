@@ -52,6 +52,7 @@ const NewTaskForm = (): JSX.Element => {
                 name="title"
                 placeholder="Title"
                 minLength={5}
+                required
               />
             </div>
             <div className="form-group">
@@ -63,6 +64,7 @@ const NewTaskForm = (): JSX.Element => {
                 name="description"
                 placeholder="Description"
                 minLength={5}
+                required
               />
             </div>
             <button className="btn btn-info" type="submit">

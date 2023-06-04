@@ -1,28 +1,27 @@
-import { ClientRequestArgs } from 'http';
 import { OperationTaskType, TaskType } from '../components/App/App';
 
-export const options: ClientRequestArgs = {
+export const options: RequestInit = {
   method: 'GET',
-  headers: {
-    Authorization: process.env.REACT_APP_API_KEY,
+  headers: new Headers({
+    Authorization: `${process.env.REACT_APP_API_KEY}`,
     'Content-Type': 'application/json',
-  },
+  }),
 };
 
-const baseAPI = async (url: string, options: any): Promise<any> => {
+const baseAPI = async (url: string, options: RequestInit): Promise<any> => {
   const response = await fetch(process.env.REACT_APP_API_HOST + url, options);
   return await response.json();
 };
 
 export const getTasksAPI = async (
-  options: any,
+  options: RequestInit,
   url: string = '/api/tasks'
 ): Promise<any> => {
   return await baseAPI(url, options);
 };
 
 const getOperationAPI = async (
-  options: any,
+  options: RequestInit,
   id: string,
   url: string = `/api/tasks/${id}/operations`
 ): Promise<any> => {
@@ -30,7 +29,7 @@ const getOperationAPI = async (
 };
 
 const createTaskAPI = async (payload: TaskType): Promise<any> => {
-  const option = {
+  const option: RequestInit = {
     ...options,
     method: 'POST',
     body: JSON.stringify(payload),
@@ -39,7 +38,7 @@ const createTaskAPI = async (payload: TaskType): Promise<any> => {
 };
 
 const updateTaskAPI = async (id: string, payload: TaskType): Promise<any> => {
-  const option = {
+  const option: RequestInit = {
     ...options,
     method: 'PUT',
     body: JSON.stringify(payload),
@@ -48,7 +47,7 @@ const updateTaskAPI = async (id: string, payload: TaskType): Promise<any> => {
 };
 
 const deleteTaskAPI = async (id: string): Promise<any> => {
-  const option = {
+  const option: RequestInit = {
     ...options,
     method: 'DELETE',
   };
@@ -56,7 +55,7 @@ const deleteTaskAPI = async (id: string): Promise<any> => {
 };
 
 const createOperationAPI = async (id: string, payload: any): Promise<any> => {
-  const option = {
+  const option: RequestInit = {
     ...options,
     method: 'POST',
     body: JSON.stringify(payload),
@@ -65,7 +64,7 @@ const createOperationAPI = async (id: string, payload: any): Promise<any> => {
 };
 
 const deleteOperationAPI = async (id: string): Promise<any> => {
-  const option = {
+  const option: RequestInit = {
     ...options,
     method: 'DELETE',
   };
@@ -76,7 +75,7 @@ const updateOperationAPI = async (
   id: string,
   payload: OperationTaskType
 ): Promise<any> => {
-  const option = {
+  const option: RequestInit = {
     ...options,
     method: 'PUT',
     body: JSON.stringify(payload),

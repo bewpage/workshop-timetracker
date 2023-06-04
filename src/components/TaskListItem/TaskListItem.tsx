@@ -7,8 +7,10 @@ import { formatTime } from '../../utils/utils';
 
 const TaskListItem = ({
   operation,
+  status,
 }: {
   operation: OperationTaskType;
+  status: string;
 }): JSX.Element => {
   const { dispatch } = useContext(TaskContext);
 
@@ -69,23 +71,26 @@ const TaskListItem = ({
           {formatTime(data.timeSpent)}
         </span>
       </div>
-      <div>
-        <button
-          className="btn btn-outline-success btn-sm mr-2"
-          onClick={e => addTimeToOperation(e, data)}>
-          +15m
-        </button>
-        <button
-          className="btn btn-outline-success btn-sm mr-2"
-          onClick={e => addTimeToOperation(e, data)}>
-          +1h
-        </button>
-        <button
-          className="btn btn-outline-danger btn-sm"
-          onClick={() => deleteOperation(data)}>
-          Delete
-        </button>
-      </div>
+
+      {status === 'open' && (
+        <div>
+          <button
+            className="btn btn-outline-success btn-sm mr-2"
+            onClick={e => addTimeToOperation(e, data)}>
+            +15m
+          </button>
+          <button
+            className="btn btn-outline-success btn-sm mr-2"
+            onClick={e => addTimeToOperation(e, data)}>
+            +1h
+          </button>
+          <button
+            className="btn btn-outline-danger btn-sm"
+            onClick={() => deleteOperation(data)}>
+            Delete
+          </button>
+        </div>
+      )}
     </li>
   );
 

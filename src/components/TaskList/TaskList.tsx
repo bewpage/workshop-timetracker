@@ -8,7 +8,7 @@ import { ReducerEnumActions } from '../../states/taskReducer';
 const TaskList = (): JSX.Element => {
   const { data, dispatch } = useContext(TaskContext);
 
-  const deleteTask = (id: string): void => {
+  const deleteTaskHandler = (id: string): void => {
     // fetch api with delete method
     api.deleteTask(id).then(data => {
       if (!data.error) {
@@ -17,9 +17,7 @@ const TaskList = (): JSX.Element => {
     });
   };
 
-  // TODO: rename function to handler
-  // do something with fetch api functions
-  const closeTask = (id: string): void => {
+  const closeTaskHandler = (id: string): void => {
     // fetch api with update method
     const updateTask = data.tasks.find(task => task.id === id);
 
@@ -44,6 +42,9 @@ const TaskList = (): JSX.Element => {
             type: ReducerEnumActions.updateTask,
             payload: response.data,
           });
+        })
+        .catch(error => {
+          console.log(error);
         });
     }
   };
@@ -79,6 +80,10 @@ const TaskList = (): JSX.Element => {
           type: ReducerEnumActions.addOperation,
           payload: response.data,
         });
+      })
+      .catch(error => {
+        // TODO handle error
+        console.log(error);
       });
     // clear form
     formData.forEach((value, key) => {
@@ -97,13 +102,13 @@ const TaskList = (): JSX.Element => {
           {value.status === 'open' ? (
             <button
               className="btn btn-dark btn-sm"
-              onClick={() => closeTask(value.id)}>
+              onClick={() => closeTaskHandler(value.id)}>
               Finish
             </button>
           ) : null}
           <button
             className="btn btn-outline-danger btn-sm ml-2"
-            onClick={() => deleteTask(value.id)}>
+            onClick={() => deleteTaskHandler(value.id)}>
             Delete
           </button>
         </div>
@@ -111,7 +116,13 @@ const TaskList = (): JSX.Element => {
       <ul className="list-group list-group-flush">
         {value.operations?.length > 0
           ? value.operations.map(operation => {
-              return <TaskListItem key={operation.id} operation={operation} />;
+              return (
+                <TaskListItem
+                  key={operation.id}
+                  operation={operation}
+                  status={value.status}
+                />
+              );
             })
           : null}
       </ul>
@@ -128,6 +139,7 @@ const TaskList = (): JSX.Element => {
                 className="form-control"
                 name="description"
                 minLength={5}
+                required
               />
               <div className="input-group-append">
                 <button className="btn btn-info" type="submit">

@@ -48,7 +48,9 @@ export const taskReducer = (
         if (task.id === action.payload.task.id) {
           return {
             ...task,
-            operations: [...task?.operations, action.payload],
+            operations: task?.operations
+              ? [...task.operations, action.payload]
+              : [action.payload],
           };
         }
         return task;

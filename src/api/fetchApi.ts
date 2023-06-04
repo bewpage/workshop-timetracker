@@ -18,7 +18,6 @@ export const getTasksAPI = async (
   options: any,
   url: string = '/api/tasks'
 ): Promise<any> => {
-  // const url = '/api/tasks';
   return await baseAPI(url, options);
 };
 
@@ -27,7 +26,6 @@ const getOperationAPI = async (
   id: string,
   url: string = `/api/tasks/${id}/operations`
 ): Promise<any> => {
-  // const url = `/api/tasks/${id}/operations`;
   return await baseAPI(url, options);
 };
 

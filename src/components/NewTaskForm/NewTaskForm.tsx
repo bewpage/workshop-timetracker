@@ -20,21 +20,20 @@ const NewTaskForm = (): JSX.Element => {
       payload[key] = value;
     });
 
-    // update the state
-    api.createTask(payload).then(data => {
-      if (!data.error) {
-        dispatch({
-          type: ReducerEnumActions.addTask,
-          payload: data.data,
-        });
-      }
-    });
+    // update the state if we have data from form
+    if (payload.title !== '' && payload.description !== '') {
+      api.createTask(payload).then(data => {
+        if (!data.error) {
+          dispatch({
+            type: ReducerEnumActions.addTask,
+            payload: data.data,
+          });
+        }
+      });
+    }
 
     // clear form
-    formData.forEach((value, key) => {
-      // delete fields input
-      form[key].value = '';
-    });
+    form.reset();
   };
 
   return (

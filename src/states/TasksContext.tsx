@@ -66,7 +66,7 @@ const TasksContext: React.FC<PropsWithChildren<Props>> = ({ children }) => {
       })
       .catch(error => {
         // TODO handle error
-        console.log(error);
+        throw new Error(error);
       })
       .finally(() => {
         dispatch({ type: ReducerEnumActions.isLoading, payload: false });

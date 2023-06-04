@@ -70,6 +70,7 @@ export const taskReducer = (
         }
         return task;
       });
+
       return { ...state, tasks: updatedTasksOperations };
     case ReducerEnumActions.deleteOperation:
       const { idOperation, idTask } = action.payload;

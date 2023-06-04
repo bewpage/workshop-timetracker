@@ -1,21 +1,35 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import TaskList from './TaskList';
-import { TaskContext } from '../../states/TasksContext';
-import { mockData, taskMockData } from '../../states/mocks/taskMockData';
+import TaskContext from '../../states/TasksContext';
+import {
+  mockAPIData,
+  operationMockData,
+  mockAPIDataTest,
+} from '../../states/mocks/taskMockData';
+import { api } from '../../api/fetchApi';
 
 describe('TaskList', () => {
   beforeEach(() => {
+    jest.spyOn(api, 'getTasks').mockResolvedValue({ data: [mockAPIDataTest] });
+    jest
+      .spyOn(api, 'getOperations')
+      .mockResolvedValue({ data: [operationMockData] });
+  });
+
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
-  const dispatch = jest.fn();
-
-  test('renders TaskList component with data', () => {
+  test('renders TaskList component with data', async () => {
     const { container } = render(
-      <TaskContext.Provider value={{ data: mockData, dispatch }}>
+      <TaskContext>
         <TaskList />
-      </TaskContext.Provider>
+      </TaskContext>
     );
+
+    await screen.findByText('Task Title Test');
+
     const taskListTitle = screen.getByText('Task Title Test');
     const taskListDescription = screen.getByText('Task Description Test');
     const finishButton = screen.getByRole('button', { name: 'Finish' });
@@ -26,17 +40,18 @@ describe('TaskList', () => {
     expect(container).toMatchSnapshot();
   });
 
-  test('renders TaskList component for close task', () => {
-    const dataTaskCloseMock = {
-      ...mockData,
-      tasks: [{ ...taskMockData, status: 'close' }],
-    };
-
+  test('renders TaskList component for close task', async () => {
+    jest
+      .spyOn(api, 'getTasks')
+      .mockResolvedValue({ data: [{ ...mockAPIDataTest, status: 'close' }] });
     const { container } = render(
-      <TaskContext.Provider value={{ data: dataTaskCloseMock, dispatch }}>
+      <TaskContext>
         <TaskList />
-      </TaskContext.Provider>
+      </TaskContext>
     );
+
+    await screen.findByText('Task Title Test');
+
     const taskListTitle = screen.getByText('Task Title Test');
     const taskListDescription = screen.getByText('Task Description Test');
     const finishButton = screen.queryAllByRole('button', { name: 'Finish' });
@@ -53,6 +68,46 @@ describe('TaskList', () => {
     expect(addButton).toHaveLength(0);
     expect(inputAdd).toHaveLength(0);
 
+    expect(container).toMatchSnapshot();
+  });
+
+  test('click finish task and close task', async () => {
+    const closeTaskAPISpy = jest
+      .spyOn(api, 'updateTask')
+      .mockResolvedValue({ data: { ...mockAPIData, status: 'close' } });
+
+    const { container } = render(
+      <TaskContext>
+        <TaskList />
+      </TaskContext>
+    );
+
+    await screen.findByText('Task Title Test');
+
+    expect(
+      screen.getByText('Description Operation Task Test')
+    ).toBeInTheDocument();
+
+    const finishButton = screen.getByRole('button', { name: 'Finish' });
+    const deleteButton = screen.getAllByRole('button', { name: 'Delete' });
+    const add15mButton = screen.getByRole('button', { name: '+15m' });
+
+    expect(deleteButton).toHaveLength(2);
+    expect(add15mButton).toBeInTheDocument();
+    expect(finishButton).toBeInTheDocument();
+
+    // click on finish button
+    await act(async () => {
+      userEvent.click(finishButton);
+    });
+
+    // check if page is updated
+    expect(closeTaskAPISpy).toHaveBeenCalledTimes(1);
+
+    await screen.findByText('Task Title Test');
+
+    expect(screen.queryAllByRole('button', { name: '+15m' })).toHaveLength(0);
+    expect(screen.queryAllByRole('button', { name: 'Delete' })).toHaveLength(1);
     expect(container).toMatchSnapshot();
   });
 });
